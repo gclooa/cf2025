@@ -62,24 +62,66 @@
       map.appendChild(btn);
     }
 
-    // Panning
+    // Panning with inertia
     let isPanning = false;
     let startX, startY;
     let mapX = 0, mapY = 0;
+    let velocityX = 0, velocityY = 0;
+    let lastMouseX = 0, lastMouseY = 0;
+    let lastTimestamp = 0;
     let scale = 1;
 
-    container.addEventListener("mousedown", e => {
+    const applyTransform = () => {
+      map.style.transform = `translate(${mapX}px, ${mapY}px) scale(${scale})`;
+    };
+
+    const animate = (timestamp) => {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const dt = (timestamp - lastTimestamp) / 16;
+      lastTimestamp = timestamp;
+
+      // Apply inertia only when not panning
+      if (!isPanning) {
+        mapX += velocityX * dt;
+        mapY += velocityY * dt;
+
+        // Friction
+        velocityX *= 0.92;
+        velocityY *= 0.92;
+
+        if (Math.abs(velocityX) < 0.01) velocityX = 0;
+        if (Math.abs(velocityY) < 0.01) velocityY = 0;
+      }
+
+      applyTransform();
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+
+    container.addEventListener("mousedown", (e) => {
       isPanning = true;
       container.style.cursor = "grabbing";
       startX = e.clientX - mapX;
       startY = e.clientY - mapY;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      velocityX = 0;
+      velocityY = 0;
     });
 
-    window.addEventListener("mousemove", e => {
+    window.addEventListener("mousemove", (e) => {
       if (!isPanning) return;
+
       mapX = e.clientX - startX;
       mapY = e.clientY - startY;
-      map.style.transform = `translate(${mapX}px, ${mapY}px) scale(${scale})`;
+
+      velocityX = e.clientX - lastMouseX;
+      velocityY = e.clientY - lastMouseY;
+
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+
+      applyTransform();
     });
 
     window.addEventListener("mouseup", () => {
@@ -87,24 +129,28 @@
       container.style.cursor = "grab";
     });
 
-    // Zoom
-    container.addEventListener("wheel", e => {
+    // Improved zoom (smooth, centered, with limits)
+    container.addEventListener("wheel", (e) => {
       e.preventDefault();
-      const zoomIntensity = 0.1;
-      const direction = e.deltaY > 0 ? -1 : 1;
+
+      const zoomIntensity = 0.15;
       const oldScale = scale;
-      scale += direction * zoomIntensity;
-      scale = Math.min(Math.max(scale, 0.4), 3);
+      const direction = e.deltaY > 0 ? -1 : 1;
+      const newScale = scale + direction * zoomIntensity;
 
-      // Adjust position to zoom around cursor
+      // Clamp zoom range
+      scale = Math.min(Math.max(newScale, 0.3), 4);
+
+      // Get cursor position relative to map
       const rect = container.getBoundingClientRect();
-      const offsetX = e.clientX - rect.left;
-      const offsetY = e.clientY - rect.top;
+      const offsetX = (e.clientX - rect.left - mapX) / oldScale;
+      const offsetY = (e.clientY - rect.top - mapY) / oldScale;
 
-      mapX -= (offsetX / oldScale - offsetX / scale);
-      mapY -= (offsetY / oldScale - offsetY / scale);
+      // Adjust for zoom so that cursor position stays consistent
+      mapX = e.clientX - rect.left - offsetX * scale;
+      mapY = e.clientY - rect.top - offsetY * scale;
 
-      map.style.transform = `translate(${mapX}px, ${mapY}px) scale(${scale})`;
+      applyTransform();
     });
   </script>
 </body>
