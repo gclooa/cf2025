@@ -24,9 +24,29 @@
       left: 0;
       transform-origin: 0 0;
       display: grid;
-      grid-template-columns: repeat(20, 60px);
-      grid-template-rows: repeat(20, 60px);
+      /* Arrange clusters across the map: 5 clusters per row x 3 rows = 15 clusters total.
+         Clusters themselves will define their internal 2x5 grid. */
+      grid-template-columns: repeat(5, max-content);
+      /* vertical gap between cluster rows: 1 grid cell high.
+         Each cell is 60px high with an internal row-gap of 2px,
+         so use 1 * (60px + 2px) to space clusters by one cell height. */
+      row-gap: calc(1 * (60px + 2px));
+      /* horizontal gap between clusters: 2 grid cells wide.
+        Each cell is 60px wide with an internal column-gap of 2px,
+        so use 2 * (60px + 2px) to space clusters by two cell widths. */
+      column-gap: calc(2 * (60px + 2px));
+    }
+
+    .cluster {
+      display: grid;
+      grid-template-columns: repeat(2, 60px);
+      grid-template-rows: repeat(5, 60px);
       gap: 2px;
+      background: transparent;
+      padding: 2px;
+      box-sizing: content-box;
+      /* Support transform offsets via data attributes */
+      transform: var(--cluster-offset, translate(0, 0));
     }
     .cell {
       width: 60px;
@@ -53,14 +73,55 @@
     const map = document.getElementById("map");
     const container = document.getElementById("map-container");
 
-    // Generate grid
-    for (let i = 0; i < 400; i++) {
-      const btn = document.createElement("button");
-      btn.className = "cell";
-      btn.textContent = i + 1;
-      btn.onclick = () => alert("Clicked cell " + (i + 1));
-      map.appendChild(btn);
+    // Generate grid in clusters of 2 columns x 5 rows
+    const totalCells = 110;
+    const cellsPerCluster = 2 * 5; // 10 cells per cluster
+    const clusters = Math.ceil(totalCells / cellsPerCluster);
+    let cellNum = 1;
+
+    // Store cluster references for offset manipulation
+    const clusterElements = [];
+
+    for (let c = 0; c < clusters; c++) {
+      const cluster = document.createElement('div');
+      cluster.className = 'cluster';
+      cluster.dataset.clusterId = c;
+
+      for (let j = 0; j < cellsPerCluster && cellNum <= totalCells; j++, cellNum++) {
+        const btn = document.createElement('button');
+        btn.className = 'cell';
+        const n = cellNum; // capture current number for the handler
+        btn.textContent = n;
+        btn.onclick = () => alert("Clicked cell " + n);
+        cluster.appendChild(btn);
+      }
+
+      map.appendChild(cluster);
+      clusterElements.push(cluster);
     }
+
+    // Function to set offset for a cluster by index or element
+    // offset can be a string like "translate(100px, 50px)" or an object {x, y}
+    const setClusterOffset = (clusterIndexOrElement, offset) => {
+      const cluster = typeof clusterIndexOrElement === 'number' 
+        ? clusterElements[clusterIndexOrElement] 
+        : clusterIndexOrElement;
+      
+      if (!cluster) return;
+      
+      let offsetString;
+      if (typeof offset === 'string') {
+        offsetString = offset;
+      } else if (typeof offset === 'object' && offset !== null) {
+        const x = offset.x || 0;
+        const y = offset.y || 0;
+        offsetString = `translate(${x}px, ${y}px)`;
+      } else {
+        offsetString = 'translate(0, 0)';
+      }
+      
+      cluster.style.setProperty('--cluster-offset', offsetString);
+    };
 
     // Panning with inertia
     let isPanning = false;
@@ -219,6 +280,12 @@
     // Initial clamp to enforce padding on load
     clampPosition();
     applyTransform();
+
+    // Offset third row clusters (indices 10-14) by 12 grids (12 * (60px + 2px) = 744px)
+    const thirdRowOffset = 12 * (60 + 2); // 744px
+    for (let i = 10; i < 15 && i < clusterElements.length; i++) {
+      setClusterOffset(i, {x: thirdRowOffset, y: 0});
+    }
   </script>
 </body>
 </html>
