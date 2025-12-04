@@ -18,7 +18,7 @@
       overflow: hidden;
       cursor: grab;
     }
-    #map {
+    #map { 
       position: absolute;
       top: 0;
       left: 0;
@@ -75,6 +75,56 @@
       map.style.transform = `translate(${mapX}px, ${mapY}px) scale(${scale})`;
     };
 
+    // Clamp mapX/mapY so that all edges have at least half the
+    // container's width/height as padding. If the map is smaller than
+    // the required padded area, center it instead.
+    const clampPosition = () => {
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+
+      const padX = cw / 2; // half screen width
+      const padY = ch / 2; // half screen height
+
+      const mapW = map.offsetWidth * scale;
+      const mapH = map.offsetHeight * scale;
+
+      // Allowed range for mapX: [minX, maxX]
+      let minX = cw - padX - mapW; // when right edge aligns with container - padX
+      let maxX = padX; // left edge may be at most padX from left
+
+      if (minX > maxX) {
+        // Map is smaller than the padded area horizontally — center it
+        mapX = (cw - mapW) / 2;
+      } else {
+        if (mapX < minX) {
+          mapX = minX;
+          velocityX = 0;
+        }
+        if (mapX > maxX) {
+          mapX = maxX;
+          velocityX = 0;
+        }
+      }
+
+      // Allowed range for mapY: [minY, maxY]
+      let minY = ch - padY - mapH;
+      let maxY = padY;
+
+      if (minY > maxY) {
+        // Map is smaller than the padded area vertically — center it
+        mapY = (ch - mapH) / 2;
+      } else {
+        if (mapY < minY) {
+          mapY = minY;
+          velocityY = 0;
+        }
+        if (mapY > maxY) {
+          mapY = maxY;
+          velocityY = 0;
+        }
+      }
+    };
+
     const animate = (timestamp) => {
       if (!lastTimestamp) lastTimestamp = timestamp;
       const dt = (timestamp - lastTimestamp) / 16;
@@ -92,6 +142,9 @@
         if (Math.abs(velocityX) < 0.01) velocityX = 0;
         if (Math.abs(velocityY) < 0.01) velocityY = 0;
       }
+
+      // Ensure we don't slide past allowed bounds
+      clampPosition();
 
       applyTransform();
       requestAnimationFrame(animate);
@@ -121,6 +174,8 @@
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
 
+      // Clamp while dragging so you can't drag past the padded edges
+      clampPosition();
       applyTransform();
     });
 
@@ -150,8 +205,20 @@
       mapX = e.clientX - rect.left - offsetX * scale;
       mapY = e.clientY - rect.top - offsetY * scale;
 
+      // Keep the map within allowed padded bounds after zoom
+      clampPosition();
       applyTransform();
     });
+
+    // Re-clamp and render on resize
+    window.addEventListener('resize', () => {
+      clampPosition();
+      applyTransform();
+    });
+
+    // Initial clamp to enforce padding on load
+    clampPosition();
+    applyTransform();
   </script>
 </body>
 </html>
