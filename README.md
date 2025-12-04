@@ -1,2 +1,2 @@
-# cf2025
-Comic Fiesta 2025 Interactive Booth Map
+# Comic Fiesta 2025 Interactive Booth Map
+An alternative to map25.comicfiesta.org.

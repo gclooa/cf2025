@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Grid Map</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    #map-container {
+      width: 100vw;
+      height: 100vh;
+      background: #f0f0f0;
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+    }
+    #map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: 0 0;
+      display: grid;
+      grid-template-columns: repeat(20, 60px);
+      grid-template-rows: repeat(20, 60px);
+      gap: 2px;
+    }
+    .cell {
+      width: 60px;
+      height: 60px;
+      background: white;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cell:hover {
+      background: #e0e0ff;
+    }
+  </style>
+</head>
+<body>
+  <div id="map-container">
+    <div id="map"></div>
+  </div>
+
+  <script>
+    const map = document.getElementById("map");
+    const container = document.getElementById("map-container");
+
+    // Generate grid
+    for (let i = 0; i < 400; i++) {
+      const btn = document.createElement("button");
+      btn.className = "cell";
+      btn.textContent = i + 1;
+      btn.onclick = () => alert("Clicked cell " + (i + 1));
+      map.appendChild(btn);
+    }
+
+    // Panning
+    let isPanning = false;
+    let startX, startY;
+    let mapX = 0, mapY = 0;
+    let scale = 1;
+
+    container.addEventListener("mousedown", e => {
+      isPanning = true;
+      container.style.cursor = "grabbing";
+      startX = e.clientX - mapX;
+      startY = e.clientY - mapY;
+    });
+
+    window.addEventListener("mousemove", e => {
+      if (!isPanning) return;
+      mapX = e.clientX - startX;
+      mapY = e.clientY - startY;
+      map.style.transform = `translate(${mapX}px, ${mapY}px) scale(${scale})`;
+    });
+
+    window.addEventListener("mouseup", () => {
+      isPanning = false;
+      container.style.cursor = "grab";
+    });
+
+    // Zoom
+    container.addEventListener("wheel", e => {
+      e.preventDefault();
+      const zoomIntensity = 0.1;
+      const direction = e.deltaY > 0 ? -1 : 1;
+      const oldScale = scale;
+      scale += direction * zoomIntensity;
+      scale = Math.min(Math.max(scale, 0.4), 3);
+
+      // Adjust position to zoom around cursor
+      const rect = container.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+
+      mapX -= (offsetX / oldScale - offsetX / scale);
+      mapY -= (offsetY / oldScale - offsetY / scale);
+
+      map.style.transform = `translate(${mapX}px, ${mapY}px) scale(${scale})`;
+    });
+  </script>
+</body>
+</html>
