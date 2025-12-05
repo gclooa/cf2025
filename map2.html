@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Map Prototype 2</title>
+	<style>
+		body { margin:0; font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; background:#fafafa }
+		.grid { display:grid; grid-template-columns: repeat(2, 60px); grid-auto-rows: 60px; gap:2px 2px; }
+		.grid button { width:60px; height:60px; border:1px solid #cfcfcf; background:white; cursor:pointer; font-size:14px }
+		.grid button:active { transform:translateY(1px) }
+	</style>
+</head>
+<body>
+	<div class="grid" id="grid" data-group="C-F"></div>
+
+	<script>
+		const grid = document.getElementById('grid');
+		// Create a 2 x 9 grid -> 18 buttons
+		for (let i = 1; i <= 18; i++) {
+			const btn = document.createElement('button');
+			btn.textContent = i;
+			btn.dataset.index = i;
+			// mark each button with the grid group
+			btn.setAttribute('data-group', 'C-F');
+			btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.id || e.currentTarget.dataset.index)));
+			grid.appendChild(btn);
+		}
+
+		// Assign each button a numerical id starting at 01, starting from
+		// button 2 (top-right) and proceeding clockwise around the grid.
+		(function assignClockwiseIds() {
+			const buttons = Array.from(grid.children);
+			const cols = 2;
+			const rows = 9;
+
+			// Build matrix [row][col] mapping to the DOM order (row-major)
+			const matrix = Array.from({ length: rows }, (_, r) =>
+				Array.from({ length: cols }, (_, c) => buttons[r * cols + c] || null)
+			);
+
+			const order = [];
+			let top = 0, bottom = rows - 1, left = 0, right = cols - 1;
+
+			while (left <= right && top <= bottom) {
+				// Down along right column
+				for (let r = top; r <= bottom; r++) order.push(matrix[r][right]);
+				right--;
+				if (left > right) break;
+
+				// Left along bottom row
+				for (let c = right; c >= left; c--) order.push(matrix[bottom][c]);
+				bottom--;
+				if (top > bottom) break;
+
+				// Up along left column
+				for (let r = bottom; r >= top; r--) order.push(matrix[r][left]);
+				left++;
+				if (left > right) break;
+
+				// Right along top row
+				for (let c = left; c <= right; c++) order.push(matrix[top][c]);
+				top++;
+			}
+
+			// Filter out any nulls (in case grid not completely filled) and assign ids
+			const filtered = order.filter(Boolean);
+			filtered.forEach((btn, idx) => {
+				btn.id = String(idx + 1).padStart(2, '0');
+				// Display the assigned id on the button
+				btn.textContent = btn.id;
+			});
+		})();
+	</script>
+</body>
+</html>
+
