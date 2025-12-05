@@ -8,13 +8,14 @@
 	<style>
 		body { margin:0; font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; background:#fafafa }
 		.group { display:flex; flex-direction:column; }
-		.C-ROW-1 { display:flex; gap:132px; align-items:flex-start; }
-		.C-ROW-2 { display:flex; gap:132px; align-items:flex-start; margin-top:64px }
+		.C-ROW-1 { display:flex; gap:126px; align-items:flex-start; }
+		.C-ROW-2 { display:flex; gap:126px; align-items:flex-start; margin-top:64px;}
 		.grid { display:grid; grid-template-columns: repeat(2, 60px); grid-auto-rows: 60px; gap:2px 2px; }
 		/* 5x2 grid variant */
 		.grid.grid-5x2 { grid-template-columns: repeat(5, 60px); grid-template-rows: repeat(2, 60px); }
 		.grid button { width:60px; height:60px; border:1px solid #cfcfcf; background:white; cursor:pointer; font-size:14px }
-		.grid button:active { transform:translateY(1px) }
+		.grid button:hover { border-color: #f44336; background-color: #f44336; color: white; }
+		#C-A { margin-left: 746px; }
 	</style>
 </head>
 <body>
