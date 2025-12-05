@@ -7,18 +7,57 @@
 	<title>Map Prototype 2</title>
 	<style>
 		body { margin:0; font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; background:#fafafa }
+		.group { display:flex; flex-direction:column; }
+		.C-ROW-1 { display:flex; gap:132px; align-items:flex-start; }
+		.C-ROW-2 { display:flex; gap:132px; align-items:flex-start; margin-top:64px }
 		.grid { display:grid; grid-template-columns: repeat(2, 60px); grid-auto-rows: 60px; gap:2px 2px; }
+		/* 5x2 grid variant */
+		.grid.grid-5x2 { grid-template-columns: repeat(5, 60px); grid-template-rows: repeat(2, 60px); }
 		.grid button { width:60px; height:60px; border:1px solid #cfcfcf; background:white; cursor:pointer; font-size:14px }
 		.grid button:active { transform:translateY(1px) }
 	</style>
 </head>
 <body>
-	<div class="grid" id="grid" data-group="C-F"></div>
+    <div class="group" id="C-PARENT">
+    	<div id="C-ROW-1" class="C-ROW-1">
+    	  <div id="C-F" class="group" data-group="C-F">
+    		<div class="grid" id="C-F-GRID-1" data-group="C-F"></div>
+    		<div class="grid" id="C-F-GRID-2" data-group="C-F" style="margin-top:64px"></div>
+    	  </div>
 
+    	  <div id="C-E" class="group" data-group="C-E">
+    		<div class="grid" id="C-E-GRID-1" data-group="C-E"></div>
+    		<div class="grid" id="C-E-GRID-2" data-group="C-E" style="margin-top:64px"></div>
+    	  </div>
+
+    	  <div id="C-D" class="group" data-group="C-D">
+    		<div class="grid" id="C-D-GRID-1" data-group="C-D"></div>
+    		<div class="grid" id="C-D-GRID-2" data-group="C-D" style="margin-top:64px"></div>
+    	  </div>
+
+    	  <div id="C-C" class="group" data-group="C-C">
+    		<div class="grid" id="C-C-GRID-1" data-group="C-C"></div>
+    		<div class="grid" id="C-C-GRID-2" data-group="C-C" style="margin-top:64px"></div>
+    	  </div>
+
+    	  <div id="C-B" class="group" data-group="C-B">
+    		<div class="grid" id="C-B-GRID-1" data-group="C-B"></div>
+    		<div class="grid" id="C-B-GRID-2" data-group="C-B" style="margin-top:64px"></div>
+    	  </div>
+		</div>
+
+		<!-- Second row: C-ROW-2 placed 64px below C-ROW-1 -->
+		<div id="C-ROW-2" class="C-ROW-2">
+		  <div id="C-A" class="group" data-group="C-A">
+			<!-- 5x2 grid: 5 columns x 2 rows -->
+			<div class="grid grid-5x2" id="C-A-GRID-1" data-group="C-A"></div>
+		  </div>
+		</div>
+    </div>
 	<script>
-		const grid = document.getElementById('grid');
-		// Create a 2 x 9 grid -> 18 buttons
-		for (let i = 1; i <= 18; i++) {
+		const grid = document.getElementById('C-F-GRID-1');
+		// Create a 2 x 5 grid -> 10 buttons
+		for (let i = 1; i <= 10; i++) {
 			const btn = document.createElement('button');
 			btn.textContent = i;
 			btn.dataset.index = i;
@@ -28,50 +67,54 @@
 			grid.appendChild(btn);
 		}
 
-		// Assign each button a numerical id starting at 01, starting from
-		// button 2 (top-right) and proceeding clockwise around the grid.
-		(function assignClockwiseIds() {
-			const buttons = Array.from(grid.children);
-			const cols = 2;
-			const rows = 9;
+		// Create a second 2 x 4 grid (8 buttons) in C-F-GRID-2
+		const grid2 = document.getElementById('C-F-GRID-2');
+		for (let i = 1; i <= 8; i++) {
+			const btn = document.createElement('button');
+			btn.textContent = i;
+			btn.dataset.index = i;
+			btn.setAttribute('data-group', 'C-F');
+			btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.dataset.index)));
+			grid2.appendChild(btn);
+		}
 
-			// Build matrix [row][col] mapping to the DOM order (row-major)
-			const matrix = Array.from({ length: rows }, (_, r) =>
-				Array.from({ length: cols }, (_, c) => buttons[r * cols + c] || null)
-			);
-
-			const order = [];
-			let top = 0, bottom = rows - 1, left = 0, right = cols - 1;
-
-			while (left <= right && top <= bottom) {
-				// Down along right column
-				for (let r = top; r <= bottom; r++) order.push(matrix[r][right]);
-				right--;
-				if (left > right) break;
-
-				// Left along bottom row
-				for (let c = right; c >= left; c--) order.push(matrix[bottom][c]);
-				bottom--;
-				if (top > bottom) break;
-
-				// Up along left column
-				for (let r = bottom; r >= top; r--) order.push(matrix[r][left]);
-				left++;
-				if (left > right) break;
-
-				// Right along top row
-				for (let c = left; c <= right; c++) order.push(matrix[top][c]);
-				top++;
+		// Populate new groups with initial 2x5 grids (10 buttons) each
+		const newGroups = ['C-E','C-D','C-C','C-B'];
+		newGroups.forEach(groupId => {
+			const g1 = document.getElementById(groupId + '-GRID-1');
+			const g2 = document.getElementById(groupId + '-GRID-2');
+			// fill first grid with 10 buttons
+			for (let i = 1; i <= 10; i++) {
+				const btn = document.createElement('button');
+				btn.textContent = i;
+				btn.dataset.index = i;
+				btn.setAttribute('data-group', groupId);
+				btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.dataset.index)));
+				g1.appendChild(btn);
 			}
+			// fill second grid with 8 buttons (2x4)
+			for (let i = 1; i <= 8; i++) {
+				const btn = document.createElement('button');
+				btn.textContent = i;
+				btn.dataset.index = i;
+				btn.setAttribute('data-group', groupId);
+				btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.dataset.index)));
+				g2.appendChild(btn);
+			}
+		});
 
-			// Filter out any nulls (in case grid not completely filled) and assign ids
-			const filtered = order.filter(Boolean);
-			filtered.forEach((btn, idx) => {
-				btn.id = String(idx + 1).padStart(2, '0');
-				// Display the assigned id on the button
-				btn.textContent = btn.id;
-			});
-		})();
+		// Populate C-A 5x2 grid (5 columns x 2 rows = 10 buttons)
+		const cAGrid = document.getElementById('C-A-GRID-1');
+		for (let i = 1; i <= 10; i++) {
+			const btn = document.createElement('button');
+			btn.textContent = i;
+			btn.dataset.index = i;
+			btn.setAttribute('data-group', 'C-A');
+			btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.dataset.index)));
+			cAGrid.appendChild(btn);
+		}
+
+
 	</script>
 </body>
 </html>
