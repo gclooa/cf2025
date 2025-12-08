@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
-	<title>Map Prototype 2</title>
+	<title>Map Prototype 3</title>
 	<style>
 		body { margin:0; font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; background:#fafafa }
 		.group { display:flex; flex-direction:column; }
@@ -17,38 +17,39 @@
 		.grid button:hover { border-color: #f44336; background-color: #f44336; color: white; }
 		#C-A { margin-left: 746px; }
 		/* Hide buttons 1, 3, 5 in C-E-GRID-1 while preserving grid positions */
-		#C-E-GRID-1 button[data-index="1"],
-		#C-E-GRID-1 button[data-index="3"],
-		#C-E-GRID-1 button[data-index="5"] { visibility: hidden; }
+		#C-E-GRID-1 button[data-index="0"],
+		#C-E-GRID-1 button[data-index="2"],
+		#C-E-GRID-1 button[data-index="4"] { visibility: hidden; }
+
 	</style>
 </head>
 <body>
-	<div class="map-container" id="map">
-		<div class="group map" id="C-PARENT">
+	<div class="map-container" id="map-container">
+		<div class="group map" id="C-PARENT map">
 			<div id="C-ROW-1" class="C-ROW-1">
 			<div id="C-F" class="group" data-group="C-F">
-				<div class="grid" id="C-F-GRID-1" data-group="C-F"></div>
-				<div class="grid" id="C-F-GRID-2" data-group="C-F" style="margin-top:64px"></div>
+				<div class="grid grid-top" id="C-F-GRID-1" data-group="C-F"></div>
+				<div class="grid grid-bot" id="C-F-GRID-2" data-group="C-F" style="margin-top:64px"></div>
 			</div>
 
 			<div id="C-E" class="group" data-group="C-E">
-				<div class="grid" id="C-E-GRID-1" data-group="C-E"></div>
-				<div class="grid" id="C-E-GRID-2" data-group="C-E" style="margin-top:64px"></div>
+				<div class="grid grid-top" id="C-E-GRID-1" data-group="C-E"></div>
+				<div class="grid grid-bot" id="C-E-GRID-2" data-group="C-E" style="margin-top:64px"></div>
 			</div>
 
 			<div id="C-D" class="group" data-group="C-D">
-				<div class="grid" id="C-D-GRID-1" data-group="C-D"></div>
-				<div class="grid" id="C-D-GRID-2" data-group="C-D" style="margin-top:64px"></div>
+				<div class="grid grid-top" id="C-D-GRID-1" data-group="C-D"></div>
+				<div class="grid grid-bot" id="C-D-GRID-2" data-group="C-D" style="margin-top:64px"></div>
 			</div>
 
 			<div id="C-C" class="group" data-group="C-C">
-				<div class="grid" id="C-C-GRID-1" data-group="C-C"></div>
-				<div class="grid" id="C-C-GRID-2" data-group="C-C" style="margin-top:64px"></div>
+				<div class="grid grid-top" id="C-C-GRID-1" data-group="C-C"></div>
+				<div class="grid grid-bot" id="C-C-GRID-2" data-group="C-C" style="margin-top:64px"></div>
 			</div>
 
 			<div id="C-B" class="group" data-group="C-B">
-				<div class="grid" id="C-B-GRID-1" data-group="C-B"></div>
-				<div class="grid" id="C-B-GRID-2" data-group="C-B" style="margin-top:64px"></div>
+				<div class="grid grid-top" id="C-B-GRID-1" data-group="C-B"></div>
+				<div class="grid grid-bot" id="C-B-GRID-2" data-group="C-B" style="margin-top:64px"></div>
 			</div>
 			</div>
 
@@ -62,39 +63,33 @@
 		</div>
 	</div>
 	<script>
-		const grid = document.getElementById('C-F-GRID-1');
-		// Create a 2 x 5 grid -> 10 buttons
-		for (let i = 1; i <= 10; i++) {
-			const btn = document.createElement('button');
-			btn.textContent = i;
-			btn.setAttribute('data-index', i);
-			btn.dataset.index = i;
-			// mark each button with the grid group
-			btn.setAttribute('data-group', 'C-F');
-			btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.id || e.currentTarget.dataset.index)));
-			grid.appendChild(btn);
-		}
-
-		// Create a second 2 x 4 grid (8 buttons) in C-F-GRID-2
-		const grid2 = document.getElementById('C-F-GRID-2');
-		for (let i = 1; i <= 8; i++) {
-			const btn = document.createElement('button');
-			btn.textContent = i;
-			btn.dataset.index = i;
-			btn.setAttribute('data-group', 'C-F');
-			btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.dataset.index)));
-			grid2.appendChild(btn);
-		}
-
-		// Populate new groups with initial 2x5 grids (10 buttons) each
-		const newGroups = ['C-E','C-D','C-C','C-B'];
-		newGroups.forEach(groupId => {
+        const arrayC1 = [
+            18,1,
+            17,2,
+            16,3,
+            15,4,
+            14,5,
+        ]
+        const arrayC2 = [
+            13,6,
+            12,7,
+            11,8,
+            10,9,
+        ]
+        const arrayC3 = [
+            10,9,8,7,6,
+            1,2,3,4,5,
+        ]
+		// Populate groups with initial 2x5 grids (10 buttons) each
+		const gridGroups = ['C-F','C-E','C-D','C-C','C-B'];
+		gridGroups.forEach(groupId => {
 			const g1 = document.getElementById(groupId + '-GRID-1');
 			const g2 = document.getElementById(groupId + '-GRID-2');
 			// fill first grid with 10 buttons
-			for (let i = 1; i <= 10; i++) {
+			for (let i = 0; i < 10; i++) {
 				const btn = document.createElement('button');
-				btn.textContent = i;
+				btn.textContent = arrayC1[i].toString().padStart(2,'0');
+                btn.id = groupId + arrayC1[i].toString().padStart(2,'0');
 				btn.setAttribute('data-index', i);
 				btn.dataset.index = i;
 				btn.setAttribute('data-group', groupId);
@@ -102,9 +97,10 @@
 				g1.appendChild(btn);
 			}
 			// fill second grid with 8 buttons (2x4)
-			for (let i = 1; i <= 8; i++) {
+			for (let i = 0; i < 8; i++) {
 				const btn = document.createElement('button');
-				btn.textContent = i;
+				btn.textContent = arrayC2[i].toString().padStart(2,'0');
+                btn.id = groupId + arrayC2[i].toString().padStart(2,'0');
 				btn.dataset.index = i;
 				btn.setAttribute('data-group', groupId);
 				btn.addEventListener('click', (e) => alert('Clicked button ' + (e.currentTarget.dataset.index)));
@@ -114,7 +110,7 @@
 
 		// Populate C-A 5x2 grid (5 columns x 2 rows = 10 buttons)
 		const cAGrid = document.getElementById('C-A-GRID-1');
-		for (let i = 1; i <= 10; i++) {
+		for (let i = 0; i < 10; i++) {
 			const btn = document.createElement('button');
 			btn.textContent = i;
 			btn.dataset.index = i;
