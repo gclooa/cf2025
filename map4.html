@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Map Prototype 4</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            height: 100vh;
+            margin: 0; 
+            font-family: system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; 
+            background: #fafafa
+        }
+        .map-container { }
+        .map { }
+        .section { display: flex; flex-direction: row; gap: 126px; }
+        .group { display: flex; }
+        .group.column { flex-direction: column; }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 60px); 
+            grid-auto-rows: 60px; 
+            gap: 2px 2px; 
+        }
+        .grid button { 
+            width: 60px; 
+            height: 60px; 
+            border: 1px solid #cfcfcf; 
+            background: white; 
+            cursor: pointer; 
+            font-size: 14px 
+        }
+        .grid button:hover { 
+            border-color: #f44336; 
+            background-color: #f44336; 
+            color: white; 
+        }
+        .tail { margin-top: 64px; }
+        #C-A-GRID-1 { 
+            margin-left: 746px;
+            grid-template-columns: repeat(5, 60px); 
+            grid-template-rows: repeat(2, 60px); 
+        }
+        #C-E-GRID-1 button[id="C-E18"],
+        #C-E-GRID-1 button[id="C-E17"],
+        #C-E-GRID-1 button[id="C-E16"] { visibility: hidden; }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <div class="map" id="C-MAP">
+            <div class="section" id="C-SECTION-1">
+                <div class="group column" id="C-F">
+                    <div class="grid head" id="C-F-GRID-1"></div>
+                    <div class="grid tail" id="C-F-GRID-2"></div>
+                </div>
+                <div class="group column" id="C-E">
+                    <div class="grid head" id="C-E-GRID-1"></div>
+                    <div class="grid tail" id="C-E-GRID-2"></div>
+                </div>
+                <div class="group column" id="C-D">
+                    <div class="grid head" id="C-D-GRID-1"></div>
+                    <div class="grid tail" id="C-D-GRID-2"></div>
+                </div>
+                <div class="group column" id="C-C">
+                    <div class="grid head" id="C-C-GRID-1"></div>
+                    <div class="grid tail" id="C-C-GRID-2"></div>
+                </div>
+                <div class="group column" id="C-B">
+                    <div class="grid head" id="C-B-GRID-1"></div>
+                    <div class="grid tail" id="C-B-GRID-2"></div>
+                </div>
+            </div>
+            <div class="section tail" id="C-SECTION-2">
+                <div class="group" id="C-A">
+                    <div class="grid" id="C-A-GRID-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Define booth grid arrays
+        const arrayC1 = [
+            18,1,
+            17,2,
+            16,3,
+            15,4,
+            14,5,
+        ]
+        const arrayC2 = [
+            13,6,
+            12,7,
+            11,8,
+            10,9,
+        ]
+        const arrayC3 = [
+            10,9,8,7,6,
+            1,2,3,4,5,
+        ]
+        // Define booth groups
+        const groupC1 = ['C-F','C-E','C-D','C-C','C-B'];
+        // Define booth grid function
+        function makegrid(group, booth, subgrid) {
+            const btn = document.createElement('button');
+            booth = booth.toString().padStart(2,'0');
+            btn.id = group + booth;
+            btn.textContent = booth;
+            btn.addEventListener('click', () => alert(`Clicked booth ${booth}`));
+            subgrid.appendChild(btn);
+        }
+        // Generate booth grids
+        groupC1.forEach(group => {
+            const gridC1 = document.getElementById(`${group}-GRID-1`);
+            const gridC2 = document.getElementById(`${group}-GRID-2`);
+            // Populate upper half of groups C-B to C-F
+            arrayC1.forEach(booth => { makegrid(group, booth, gridC1) });
+            // Populate lower half of groups C-B to C-F
+            arrayC2.forEach(booth => { makegrid(group, booth, gridC2) });
+        });
+            // Populate group C-A
+            const gridC3 = document.getElementById(`C-A-GRID-1`);
+            arrayC3.forEach(booth => { makegrid("C-A", booth, gridC3) });
+    </script>
+</body>
+</html>
