@@ -10,34 +10,42 @@
     <style>
         body {
             display: flex;
-            align-items: center; 
+            align-items: center;
             justify-content: center;
             height: 100vh;
-            margin: 0; 
+            margin: 0;
             font-family: "Inter",Helvetica,Arial,sans-serif;
             font-weight: 400;
             font-style: normal;
             background: #2b2b2b;
             color: white;
         }
+        div { gap: 2px; }
         .map-container { }
         .map { }
-        .section { display: flex; flex-direction: row; }
+        .pad-head { padding-top: 64px; }
+        .pad-tail { padding-bottom: 64px; }
+        .section { 
+            display: flex; 
+            flex-direction: row; 
+            gap: 126px; 
+            padding-left: 64px;
+            padding-right: 64px;
+            background-color: floralwhite;
+        }
         .group { display: flex; }
-        .group.column { flex-direction: column; }
+        .group.column { flex-direction: column;}
+        .group.row { flex-direction: row;}
         .grid { 
             display: grid; 
             grid-template-columns: repeat(2, 60px); 
             grid-auto-rows: 60px; 
-            gap: 2px 2px; 
-            padding: 64px 64px 0px 64px;
-            background-color: floralwhite;
         }
         .grid button { 
             width: 60px; 
             height: 60px; 
-            border: 1px solid #f44336; 
-            background: #f44336; 
+            border: 1px solid #ed174f; 
+            background: #ed174f; 
             color: white;
             cursor: pointer; 
             font-family: "Cal Sans",Helvetica,Arial,sans-serif;
@@ -48,21 +56,52 @@
             transition: background 0.3s, color 0.3s;
         }
         .grid button:hover { 
-            border-color: #f44336; 
+            border-color: #ed174f; 
             background-color: white; 
-            color: #f44336; 
+            color: #ed174f; 
             transition: background 0.3s, color 0.3s;
         }
-        .tail { padding-bottom: 64px; }
-        #C-A-GRID-1 { 
-            margin-left: 746px;
-            grid-template-columns: repeat(5, 60px); 
-            grid-template-rows: repeat(2, 60px); 
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ed174f;
+            font-family: "Cal Sans",Helvetica,Arial,sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+        #C-LABEL-A { width: 62px; height: calc(2 * (60px + 2px) - 2px); }
+        #C-LABEL-B,
+        #C-LABEL-C,
+        #C-LABEL-D,
+        #C-LABEL-E,
+        #C-LABEL-F { width: calc(2 * (60px + 2px) - 2px); height: 62px; }
+        #C-LABEL-ENTRY {
+            justify-content: left;
+            align-items: center;
+            color: #2b2b2b;
+            width: calc(4 * (60px + 2px) - 2px);
+            height: calc(2 * (60px + 2px) - 2px);
+        }
+        #C-LABEL-EXIT {
+            justify-content: left;
+            align-items: end;
+            color: #2b2b2b;
+            width: calc(2 * (60px + 2px) - 2px);
+            height: 64px;
+        }
+        #C-SECTION-2 {
+            margin-left: calc(8 * (60px + 2px));
+        }
+        #C-A-GRID-1 {
+            grid-template-columns: repeat(5, 60px);
+            grid-template-rows: repeat(2, 60px);
         }
         #C-E-GRID-1 button[id="C-E18"],
         #C-E-GRID-1 button[id="C-E17"],
         #C-E-GRID-1 button[id="C-E16"] { visibility: hidden; }
-        /* Overlay positioned at bottom-left corner */
         #overlay {
             position: fixed;
             top: 16px; 
@@ -83,31 +122,41 @@
     <div id="overlay">TEST BOOTHS</div>
     <div class="map-container">
         <div class="map" id="C-MAP">
-            <div class="section" id="C-SECTION-1">
+            <div class="section" id="C-SECTION-0">
+                <div class="box" id="C-LABEL-EXIT">🡸 EXIT</div>
+            </div>
+            <div class="section pad-tail" id="C-SECTION-1">
                 <div class="group column" id="C-F">
-                    <div class="grid" id="C-F-GRID-1"></div>
+                    <div class="box" id="C-LABEL-F">C-F</div>
+                    <div class="grid pad-tail" id="C-F-GRID-1"></div>
                     <div class="grid" id="C-F-GRID-2"></div>
                 </div>
                 <div class="group column" id="C-E">
-                    <div class="grid" id="C-E-GRID-1"></div>
+                    <div class="box" id="C-LABEL-E">C-E</div>
+                    <div class="grid pad-tail" id="C-E-GRID-1"></div>
                     <div class="grid" id="C-E-GRID-2"></div>
                 </div>
                 <div class="group column" id="C-D">
-                    <div class="grid" id="C-D-GRID-1"></div>
+                    <div class="box" id="C-LABEL-D">C-D</div>
+                    <div class="grid pad-tail" id="C-D-GRID-1"></div>
                     <div class="grid" id="C-D-GRID-2"></div>
                 </div>
                 <div class="group column" id="C-C">
-                    <div class="grid" id="C-C-GRID-1"></div>
+                    <div class="box" id="C-LABEL-C">C-C</div>
+                    <div class="grid pad-tail" id="C-C-GRID-1"></div>
                     <div class="grid" id="C-C-GRID-2"></div>
                 </div>
                 <div class="group column" id="C-B">
-                    <div class="grid" id="C-B-GRID-1"></div>
+                    <div class="box" id="C-LABEL-B">C-B</div>
+                    <div class="grid pad-tail" id="C-B-GRID-1"></div>
                     <div class="grid" id="C-B-GRID-2"></div>
                 </div>
             </div>
-            <div class="section" id="C-SECTION-2">
-                <div class="group" id="C-A">
-                    <div class="grid tail" id="C-A-GRID-1"></div>
+            <div class="section pad-tail" id="C-SECTION-2">
+                <div class="group row" id="C-A">
+                    <div class="box" id="C-LABEL-ENTRY">ENTRY 🡺</div>
+                    <div class="grid" id="C-A-GRID-1"></div>
+                    <div class="box" id="C-LABEL-A">C-A</div>
                 </div>
             </div>
         </div>
