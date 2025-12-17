@@ -10,48 +10,126 @@
     <title>Map Prototype 4</title>
 </head>
 <body>
-    <div id="overlay">TEST BOOTHS</div>
+    <div class="overlay">TEST BOOTHS</div>
     <div class="map-container">
-        <div class="map" id="C-MAP">
-            <div class="section" id="C-SECTION-0">
-                <div class="box" id="C-LABEL-EXIT">🡸 EXIT</div>
+        <div class="map">
+        <div class="group row" id="MAP-LEVELS">
+            <!-- COSPLAY BOOTHS, LEVEL 1 HALL 6 -->
+            <div id="C-MAP">
+                <div class="section" id="C-SECTION-0">
+                    <div class="label" id="C-LABEL-EXIT">🡸 EXIT</div>
+                </div>
+                <div class="section pad-tail" id="C-SECTION-1">
+                    <div class="group column" id="C-F">
+                        <div class="label horizontal" id="C-LABEL-F">C-F</div>
+                        <div class="grid pad-tail" id="C-F-GRID-1"></div>
+                        <div class="grid" id="C-F-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="C-E">
+                        <div class="label horizontal" id="C-LABEL-E">C-E</div>
+                        <div class="grid pad-tail" id="C-E-GRID-1"></div>
+                        <div class="grid" id="C-E-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="C-D">
+                        <div class="label horizontal" id="C-LABEL-D">C-D</div>
+                        <div class="grid pad-tail" id="C-D-GRID-1"></div>
+                        <div class="grid" id="C-D-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="C-C">
+                        <div class="label horizontal" id="C-LABEL-C">C-C</div>
+                        <div class="grid pad-tail" id="C-C-GRID-1"></div>
+                        <div class="grid" id="C-C-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="C-B">
+                        <div class="label horizontal" id="C-LABEL-B">C-B</div>
+                        <div class="grid pad-tail" id="C-B-GRID-1"></div>
+                        <div class="grid" id="C-B-GRID-2"></div>
+                    </div>
+                </div>
+                <div class="section pad-tail" id="C-SECTION-2">
+                    <div class="group row" id="C-A">
+                        <div class="label" id="C-LABEL-ENTRY">ENTRY 🡺</div>
+                        <div class="grid" id="C-A-GRID-1"></div>
+                        <div class="label vertical" id="C-LABEL-A">C-A</div>
+                    </div>
+                </div>
             </div>
-            <div class="section pad-tail" id="C-SECTION-1">
-                <div class="group column" id="C-F">
-                    <div class="box" id="C-LABEL-F">C-F</div>
-                    <div class="grid pad-tail" id="C-F-GRID-1"></div>
-                    <div class="grid" id="C-F-GRID-2"></div>
+            <!-- PREMIUM BOOTHS, LEVEL 3 GRAND BALLROOM -->
+            <div id="P-MAP">
+                <div class="section" id="P-SECTION-0">
+                    <div id="P-LABEL-SPACER-1"></div>
+                    <div class="label" id="P-LABEL-EXIT">EXIT<br>🡹</div>
+                    <div id="P-LABEL-SPACER-2"></div>
+                    <div class="label" id="P-LABEL-ENTRY">ENTRY<br>🡻</div>
                 </div>
-                <div class="group column" id="C-E">
-                    <div class="box" id="C-LABEL-E">C-E</div>
-                    <div class="grid pad-tail" id="C-E-GRID-1"></div>
-                    <div class="grid" id="C-E-GRID-2"></div>
-                </div>
-                <div class="group column" id="C-D">
-                    <div class="box" id="C-LABEL-D">C-D</div>
-                    <div class="grid pad-tail" id="C-D-GRID-1"></div>
-                    <div class="grid" id="C-D-GRID-2"></div>
-                </div>
-                <div class="group column" id="C-C">
-                    <div class="box" id="C-LABEL-C">C-C</div>
-                    <div class="grid pad-tail" id="C-C-GRID-1"></div>
-                    <div class="grid" id="C-C-GRID-2"></div>
-                </div>
-                <div class="group column" id="C-B">
-                    <div class="box" id="C-LABEL-B">C-B</div>
-                    <div class="grid pad-tail" id="C-B-GRID-1"></div>
-                    <div class="grid" id="C-B-GRID-2"></div>
+                <div class="section pad-tail" id="P-SECTION-1">
+                    <div class="group column" id="P-K">
+                        <div class="label horizontal" id="P-LABEL-K">P-K</div>
+                        <div class="grid pad-tail" id="P-K-GRID-1"></div>
+                        <div class="grid" id="P-K-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-J">
+                        <div class="label horizontal" id="P-LABEL-J">P-J</div>
+                        <div class="grid pad-head pad-tail" id="P-J-GRID-1"></div>
+                        <div class="grid" id="P-J-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-I">
+                        <div class="label horizontal" id="P-LABEL-I">P-I</div>
+                        <div class="grid pad-tail" id="P-I-GRID-1"></div>
+                        <div class="grid" id="P-I-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-H">
+                        <div class="label horizontal" id="P-LABEL-H">P-H</div>
+                        <div class="grid pad-tail" id="P-H-GRID-1"></div>
+                        <div class="grid" id="P-H-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-G">
+                        <div class="label horizontal" id="P-LABEL-G">P-G</div>
+                        <div class="grid pad-tail" id="P-G-GRID-1"></div>
+                        <div class="grid" id="P-G-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-F">
+                        <div class="label horizontal" id="P-LABEL-F">P-F</div>
+                        <div class="grid pad-tail" id="P-F-GRID-1"></div>
+                        <div class="grid" id="P-F-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-E">
+                        <div class="label horizontal" id="P-LABEL-E">P-E</div>
+                        <div class="grid pad-tail" id="P-E-GRID-1"></div>
+                        <div class="grid" id="P-E-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-D">
+                        <div class="label horizontal" id="P-LABEL-D">P-D</div>
+                        <div class="grid pad-tail" id="P-D-GRID-1"></div>
+                        <div class="grid" id="P-D-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-C">
+                        <div class="label horizontal" id="P-LABEL-C">P-C</div>
+                        <div class="grid pad-tail" id="P-C-GRID-1"></div>
+                        <div class="grid" id="P-C-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-B">
+                        <div class="label horizontal" id="P-LABEL-B">P-B</div>
+                        <div class="grid pad-head pad-tail" id="P-B-GRID-1"></div>
+                        <div class="grid" id="P-B-GRID-2"></div>
+                    </div>
+                    <div class="group column" id="P-A">
+                        <div class="label horizontal" id="P-LABEL-A">P-A</div>
+                        <div class="grid pad-tail" id="P-A-GRID-1"></div>
+                        <div class="grid" id="P-A-GRID-2"></div>
+                    </div>
                 </div>
             </div>
-            <div class="section pad-tail" id="C-SECTION-2">
-                <div class="group row" id="C-A">
-                    <div class="box" id="C-LABEL-ENTRY">ENTRY 🡺</div>
-                    <div class="grid" id="C-A-GRID-1"></div>
-                    <div class="box" id="C-LABEL-A">C-A</div>
+        </div> <!-- End of MAP-LEVELS -->
+            <!-- BASIC BOOTHS, LEVEL 3 HALL 7 -->
+            <div id="B-MAP">
+                <div class="section" id="B-SECTION-0">
+                    <div class="label" id="B-LABEL-EXIT">EXIT<br>🡸</div>
                 </div>
+                <!-- Placeholder -->
             </div>
-        </div>
-    </div>
+        </div> <!-- End of map -->
+    </div> <!-- End of map-container -->
     <script src="main.js"></script>
     <script src="mapview.js"></script>
 </body>
