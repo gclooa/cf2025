@@ -57,9 +57,20 @@ div {
     padding-right: 62px;
     background-color: floralwhite;
 }
-.grid { 
-    display: grid; 
+.grid { display: grid; }
+.type-a { 
     grid-template-columns: repeat(2, 60px); 
+    grid-auto-rows: 60px; 
+}
+.type-b { 
+    grid-template-columns: repeat(5, 60px); 
+    grid-auto-rows: 60px; 
+}
+.type-c { 
+    grid-auto-flow: column;
+}
+.type-d {
+    grid-template-columns: repeat(6, 60px); 
     grid-auto-rows: 60px; 
 }
 .grid button { 
@@ -96,7 +107,7 @@ div {
 .label.horizontal { width: calc(2 * (60px + 2px) - 2px); height: 62px; }
 .label.vertical { width: 62px; height: calc(2 * (60px + 2px) - 2px); }
 
-#MAP-LEVELS { gap: 126px; }
+#MAP-SEPARATOR { gap: 126px; }
 
 #C-LABEL-ENTRY {
     justify-content: left;
@@ -114,10 +125,6 @@ div {
 }
 #C-SECTION-2 {
     margin-left: calc(8 * (60px + 2px));
-}
-#C-A-GRID-1 {
-    grid-template-columns: repeat(5, 60px);
-    grid-template-rows: repeat(2, 60px);
 }
 #C-E18, #C-E17, #C-E16 { visibility: hidden; }
 
@@ -146,3 +153,25 @@ div {
     gap: 64px;
 }
 #P-K20, #P-K01, #P-A20, #P-A01 { visibility: hidden; }
+
+#B-SECTION-1,
+#B-SUBSECTION-2 {
+    flex-direction: column; 
+    gap: 2px;
+    align-items: end;
+}
+#B-SUBSECTION-1 {
+    gap: 64px;
+}
+#B-SECTION-2 {
+    align-items: start;
+    justify-content: end;
+    background-color: floralwhite;
+    gap: 2px;
+}
+#B-SECTION-3 {
+    flex-direction: column; 
+    gap: 2px;
+    align-items: end;
+    margin-left: calc(24 * (60px + 2px));
+}
